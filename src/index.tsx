@@ -53,6 +53,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    children:[{
+
+      }
+
+    ]
     // Ajouter vos routes enfants ici
   },
   {

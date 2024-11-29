@@ -38,7 +38,9 @@ const Textarea: React.FC<TextareaProps> = ({
 }) => {
   return (
     <>
-      <label className={labelcss}>{label}</label>
+      <label htmlFor={name} className={labelcss}>
+        {label}
+      </label>
       <div className="h-24">
         <textarea
           id={name}

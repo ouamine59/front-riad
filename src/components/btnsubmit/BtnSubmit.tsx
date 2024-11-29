@@ -7,15 +7,22 @@ interface BtnSubmitProps {
   id: string;
   value: string;
 }
-const BtnSubmit: React.FC<BtnSubmitProps> = (props) => {
+
+const BtnSubmit: React.FC<BtnSubmitProps> = ({
+  container_submit,
+  click,
+  classe,
+  id,
+  value,
+}) => {
   return (
-    <div className={props.container_submit}>
+    <div className={container_submit}>
       <input
-        onClick={props.click}
-        className={props.classe}
+        onClick={click}
+        className={classe}
         type="submit"
-        id={props.id}
-        value={props.value}
+        id={id}
+        value={value}
       />
     </div>
   );
