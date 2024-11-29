@@ -12,6 +12,8 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import Admin from "./Admin";
+// pages
+import ListingProducts from "./pages/listingproducts/ListingProducts";
 
 // Création du store pour react-auth-kit
 const store = createStore({
@@ -53,11 +55,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children:[{
-
-      }
-
-    ]
+    children: [
+      {
+        path: "produits/liste",
+        element: <ListingProducts />,
+      },
+    ],
     // Ajouter vos routes enfants ici
   },
   {
