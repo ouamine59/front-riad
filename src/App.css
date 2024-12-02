@@ -1,14 +1,14 @@
-:root{
-  --main-background: #88A9CF;
+:root {
+  --main-background: #88a9cf;
   --font-family: Roboto;
-  --color-font: #88A9CF;
-  --color-title : white ;
-  --color-text : #88A9CF;
-  --main-bg : #FAF8F8;
+  --color-font: #88a9cf;
+  --color-title: white;
+  --color-text: #88a9cf;
+  --main-bg: #faf8f8;
 }
-body{
+body {
   font-family: var(--font-family);
-  width:380px;
-  margin-left:auto;
+  width: 100%;
+  margin-left: auto;
   margin-right: auto;
 }

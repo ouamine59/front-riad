@@ -20,6 +20,16 @@ const OneProduct: React.FC<Product> = ({
   description,
   image,
 }) => {
+  function ajouterTexteAvantDeuxDerniers(chaine: string) {
+    if (chaine.length < 2) {
+      // Si la chaîne contient moins de deux caractères, on retourne la chaîne avec le texte ajouté à la fin
+      return `0,${chaine}€`;
+    }
+
+    return `${chaine.slice(0, -2)}€${chaine.slice(-2)}`;
+  }
+  const p = ajouterTexteAvantDeuxDerniers(price);
+  const pdis = ajouterTexteAvantDeuxDerniers(priceDiscount);
   return (
     <div className="containerOneProduct d-flex mb-3 shadow" key={id}>
       {image && image.url ? (
@@ -46,7 +56,7 @@ const OneProduct: React.FC<Product> = ({
         <p className="descriptionOneProduct">{description}</p>
         <div className="containerPriceAdd d-flex justify-content-end align-items-center  w-100 ">
           <div className="price">
-            {price} {discount && `(Discounted: ${priceDiscount})`}
+            {p} {discount && `(Discounted: ${pdis})`}
           </div>
           <div className="btnAdd d-flex justify-content-center align-items-center rounded-5">
             +

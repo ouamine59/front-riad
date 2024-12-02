@@ -1,46 +1,45 @@
-.containerOneProduct{
-    width:390px;
-    height:150px;
-    padding:20px;
-    background-color: var(--main-bg);
+.containerOneProduct {
+  width: 390px;
+  height: 150px;
+  padding: 20px;
+  background-color: var(--main-bg);
 }
 
-.imageOneProduct{
-    width:120px;
-    height:120px;
+.imageOneProduct {
+  width: 120px;
+  height: 120px;
 }
-.blockInfoOneProduct{
-    width:240px;
+.blockInfoOneProduct {
+  width: 240px;
 }
-.titleOneProduct{
-    background-color: var(--color-font);
-    color: var(--color-title);
-    border-radius: 15px 0px 0px 15px;
-    padding-left: 25px;
+.titleOneProduct {
+  background-color: var(--color-font);
+  color: var(--color-title);
+  border-radius: 15px 0px 0px 15px;
+  padding-left: 25px;
 }
-.descriptionOneProduct{
-    color: var(--color-text)
+.descriptionOneProduct {
+  color: var(--color-text);
 }
-.containerAmountOneProduct{
-    width:55px;
-    height:40px;
-    border: 1px solid  var(--main-background);
-    border-radius: 5px;
-    margin-top:-5px;  
+.containerAmountOneProduct {
+  width: 55px;
+  height: 40px;
+  border: 1px solid var(--main-background);
+  border-radius: 5px;
+  margin-top: -5px;
 }
-.amountOneProduct{
-    width:20px;
-    height:30px;
-    text-align: center;
+.amountOneProduct {
+  width: 20px;
+  height: 30px;
+  text-align: center;
 }
-.containerPriceAdd{
-    margin-bottom: 10px;
+.containerPriceAdd {
+  margin-bottom: 10px;
 }
-.btnAdd{
-    width:40px;
-    height:40px;
-    background-color: #FBDF0B;
-    color:white;
-    font-size: 36px;
-
+.btnAdd {
+  width: 40px;
+  height: 40px;
+  background-color: #fbdf0b;
+  color: white;
+  font-size: 36px;
 }

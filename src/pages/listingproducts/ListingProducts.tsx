@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
 import OneProduct from "../../components/oneproduct/OneProduct";
 
 interface Product {
@@ -12,6 +13,8 @@ interface Product {
 }
 
 const ListingProducts = () => {
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1225px)" });
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [products, setProducts] = useState<Product[]>([]);
 
   const listing = async () => {
@@ -34,9 +37,14 @@ const ListingProducts = () => {
   useEffect(() => {
     listing();
   }, []);
-
+  let className;
+  if (isBigScreen) {
+    className = "d-flex flex-row flex-wrap mx-auto justify-content-evenly";
+  } else if (isTabletOrMobile) {
+    className = "d-flex flex-column mx-auto";
+  }
   return (
-    <div>
+    <div className={className}>
       {products.length === 0 ? (
         <p>No products found</p>
       ) : (
