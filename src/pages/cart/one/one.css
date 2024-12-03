@@ -1,0 +1,17 @@
+.one {
+  border-bottom: 1px solid black;
+  height: 100px;
+  margin-bottom: 25px;
+  width: 380px;
+}
+.titleOne {
+  background-color: var(--main-background);
+  color: white;
+  padding-left: 25px;
+}
+.descriptionOne {
+  color: var(--main-color);
+}
+.priceOne {
+  display: fl;
+}

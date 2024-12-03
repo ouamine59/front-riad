@@ -14,7 +14,8 @@ import App from "./App";
 import Admin from "./Admin";
 // pages
 import ListingProducts from "./pages/listingproducts/ListingProducts";
-
+import LoginClient from "./pages/loginclient/LoginClient";
+import Cart from "./pages/cart/cart/Cart";
 // Création du store pour react-auth-kit
 const store = createStore({
   authName: "_auth",
@@ -59,6 +60,14 @@ const router = createBrowserRouter([
       {
         path: "produits/liste",
         element: <ListingProducts />,
+      },
+      {
+        path: "se-connecter",
+        element: <LoginClient />,
+      },
+      {
+        path: "/panier/detail",
+        element: <Cart />,
       },
     ],
     // Ajouter vos routes enfants ici

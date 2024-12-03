@@ -1,15 +1,21 @@
 import React from "react";
-import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
+import {
+  UseFormRegister,
+  FieldErrors,
+  RegisterOptions,
+  Path,
+  FieldValues,
+} from "react-hook-form";
 
-type InputProps = {
+type InputProps<TFieldValues extends FieldValues> = {
   id: string;
-  name: string;
+  name: Path<TFieldValues>; // Utilisation de Path pour garantir une compatibilité stricte
   label: string;
-  register: UseFormRegister<FieldValues>;
-  errors: FieldErrors<FieldValues>;
+  register: UseFormRegister<TFieldValues>;
+  errors: FieldErrors<TFieldValues>;
   required?: boolean;
   type: string;
-  validationSchema?: Record<string, unknown>;
+  validationSchema?: RegisterOptions<TFieldValues>;
   container_input?: string;
   classe?: string;
   value?: string;
@@ -24,7 +30,7 @@ type InputProps = {
   labelcss?: string;
 };
 
-const Input: React.FC<InputProps> = ({
+const Input = <TFieldValues extends FieldValues>({
   id,
   name,
   label,
@@ -33,7 +39,7 @@ const Input: React.FC<InputProps> = ({
   required = false,
   type,
   validationSchema = {},
-  container_input = "", // Classe par défaut pour le conteneur
+  container_input = "",
   classe = "",
   value = "",
   messRequired = "This field is required",
@@ -45,15 +51,14 @@ const Input: React.FC<InputProps> = ({
   messValidate,
   onchange,
   labelcss = "",
-}) => {
-  // Vérification des erreurs pour ce champ spécifique
+}: InputProps<TFieldValues>) => {
   const errorType = errors?.[name]?.type;
 
   return (
     <div className={container_input}>
       <label className={labelcss} htmlFor={id}>
         {label}
-        {required && " *"} {/* Affiche une étoile si le champ est requis */}
+        {required && " *"}
       </label>
       <input
         id={id}
@@ -63,7 +68,6 @@ const Input: React.FC<InputProps> = ({
         {...register(name, validationSchema)}
         onChange={onchange}
       />
-      {/* Gestion des messages d'erreur */}
       <div className="h-2.5">
         {errorType === "required" && (
           <div className="text-red-500">{messRequired}</div>

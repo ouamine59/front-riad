@@ -1,0 +1,9 @@
+.header {
+  background-color: var(--main-background);
+  height: 29px;
+}
+
+.nav {
+  color: white;
+  text-decoration: none;
+}

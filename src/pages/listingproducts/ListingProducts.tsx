@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
+// components
 import OneProduct from "../../components/oneproduct/OneProduct";
+import H1visiteur from "../../components/h1visiteur/H1visiteur";
 
 interface Product {
-  id: number;
+  id: string;
   title: string;
   price: string;
   discount: boolean;
@@ -17,23 +19,27 @@ const ListingProducts = () => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [products, setProducts] = useState<Product[]>([]);
 
+  const [error, setError] = useState<string | null>(null);
+
   const listing = async () => {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_URL}api/products/listing`,
       );
       if (!response.ok) {
+        setError("Failed to fetch products.");
         setProducts([]);
         return;
       }
       const responseData = await response.json();
       const data: Product[] = responseData.result;
       setProducts(data);
-    } catch (error) {
+      setError(null);
+    } catch (err) {
+      setError("Something went wrong. Please try again later.");
       setProducts([]);
     }
   };
-
   useEffect(() => {
     listing();
   }, []);
@@ -44,24 +50,28 @@ const ListingProducts = () => {
     className = "d-flex flex-column mx-auto";
   }
   return (
-    <div className={className}>
-      {products.length === 0 ? (
-        <p>No products found</p>
-      ) : (
-        products.map((p) => (
-          <OneProduct
-            key={p.id}
-            id={p.id}
-            title={p.title}
-            description={p.description}
-            price={p.price}
-            priceDiscount={p.priceDiscount}
-            discount={p.discount}
-            image={p.image}
-          />
-        ))
-      )}
-    </div>
+    <>
+      <H1visiteur title="LES PRODUITS" />
+      <div className={className}>
+        {error && <p className="text-danger">{error}</p>}
+        {products.length === 0 && !error ? (
+          <p>No products found</p>
+        ) : (
+          products.map((p) => (
+            <OneProduct
+              key={p.id}
+              id={p.id}
+              title={p.title}
+              description={p.description}
+              price={p.price}
+              priceDiscount={p.priceDiscount}
+              discount={p.discount}
+              image={p.image}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 };
 

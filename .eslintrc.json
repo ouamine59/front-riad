@@ -17,6 +17,13 @@
   ],
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ],
     "@typescript-eslint/quotes": ["off"],
     "@typescript-eslint/no-explicit-any": "warn",
     "react/jsx-props-no-spreading": "off",
@@ -28,6 +35,7 @@
         "unnamedComponents": "arrow-function"
       }
     ],
+
     "react/require-default-props": "off",
     "react/jsx-no-useless-fragment": ["warn", { "allowExpressions": true }],
     "import/extensions": [
