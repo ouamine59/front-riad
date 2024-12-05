@@ -12,11 +12,18 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import Admin from "./Admin";
+import Consumer from "./Consumer";
 // pages
 import ListingProducts from "./pages/listingproducts/ListingProducts";
 import LoginClient from "./pages/loginclient/LoginClient";
 import Cart from "./pages/cart/cart/Cart";
-// Création du store pour react-auth-kit
+import AppError from "./AppError";
+import Summary from "./pages/cart/summary/Summary";
+import Register from "./pages/register/Register";
+import Payment from "./pages/cart/payment/Payment";
+import Account from "./pages/account/Account";
+import BoardConsumer from "./pages/boardconsumer/BoardConsumer";
+
 const store = createStore({
   authName: "_auth",
   authType: "cookie",
@@ -38,12 +45,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
       const tokenValue = token; // Appel de la fonction token
       if (tokenValue) {
         const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
-        if (user?.role?.role === "admin") {
+        if (user?.roles.includes("ROLE_ADMIN")) {
           return <>{children}</>;
         }
       }
     } catch (error) {
-      // console.error("Erreur lors de la vérification du token : ", error);
+      return <AppError />;
     }
   }
 
@@ -51,11 +58,45 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   return <Navigate to="/login" replace />;
 };
 
+const PrivateConsumer: React.FC<PrivateRouteProps> = ({ children }) => {
+  const auth = useAuthUser();
+  const token = useAuthHeader();
+
+  if (auth && token) {
+    try {
+      const tokenValue = token; // Appel de la fonction token
+      if (tokenValue) {
+        const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
+        if (user?.roles?.includes("ROLE_CLIENT")) {
+          return <>{children}</>;
+        }
+      }
+    } catch (error) {
+      return <AppError />;
+    }
+  }
+
+  // Redirection si non connecté ou non autorisé
+  return <Navigate to="/login" replace />;
+};
+const Login: React.FC<PrivateRouteProps> = ({ children }) => {
+  const auth = useAuthUser();
+  let isConnected = true; // Le type est inféré automatiquement
+  if (!auth) {
+    isConnected = false;
+  }
+  return isConnected ? (
+    <Navigate to="/client/tableau-de-bord" />
+  ) : (
+    <>{children}</>
+  );
+};
 // Configuration du router
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <AppError />,
     children: [
       {
         path: "produits/liste",
@@ -63,14 +104,25 @@ const router = createBrowserRouter([
       },
       {
         path: "se-connecter",
-        element: <LoginClient />,
+        element: (
+          <Login>
+            <LoginClient />
+          </Login>
+        ),
       },
       {
         path: "/panier/detail",
         element: <Cart />,
       },
+      {
+        path: "/panier/recapitulatif",
+        element: <Summary />,
+      },
+      {
+        path: "/inscription",
+        element: <Register />,
+      },
     ],
-    // Ajouter vos routes enfants ici
   },
   {
     path: "/admin",
@@ -79,6 +131,28 @@ const router = createBrowserRouter([
         <Admin />
       </PrivateRoute>
     ),
+  },
+  {
+    path: "/client",
+    element: (
+      <PrivateConsumer>
+        <Consumer />
+      </PrivateConsumer>
+    ),
+    children: [
+      {
+        path: "commande/paiement",
+        element: <Payment />,
+      },
+      {
+        path: "mon-compte",
+        element: <Account />,
+      },
+      {
+        path: "tableau-de-bord",
+        element: <BoardConsumer />,
+      },
+    ],
   },
 ]);
 

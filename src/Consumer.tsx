@@ -1,14 +1,15 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import Header from "./components/client/header/Header";
 
 // Utilisez une déclaration de fonction classique
-const Admin = () => {
+const Consumer = () => {
   return (
     <>
-      qscsdc
+      <Header />
       <Outlet />
     </>
   );
 };
 
-export default Admin;
+export default Consumer;

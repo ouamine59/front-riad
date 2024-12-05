@@ -1,17 +1,25 @@
 import React from "react";
-import { UseFormRegister, FieldValues } from "react-hook-form";
+import {
+  UseFormRegister,
+  RegisterOptions,
+  FieldValues,
+  Path,
+} from "react-hook-form";
+import "./selectinput.css";
 
-interface SelectInputProps {
+interface SelectInputProps<T extends FieldValues> {
   label?: string;
   options: { value: string | number; label: string }[];
-  name: string;
-  validationSchema: object;
-  register: UseFormRegister<FieldValues>;
-  defaultValue?: string | number; // Utilisez defaultValue à la place de value
+  name: Path<T>; // Utilisation de Path<T> pour les champs de formulaire
+  validationSchema?: RegisterOptions<T>;
+  register: UseFormRegister<T>;
+  defaultValue?: string | number;
   className: string;
+  id: string;
+  onchange?: (option: { value: string | number; label: string }) => void;
 }
 
-const SelectInput: React.FC<SelectInputProps> = ({
+const SelectInput = <T extends FieldValues>({
   label,
   options,
   name,
@@ -19,15 +27,27 @@ const SelectInput: React.FC<SelectInputProps> = ({
   register,
   defaultValue,
   className,
-}) => {
+  id,
+  onchange,
+}: SelectInputProps<T>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOption = options.find(
+      (option) => option.value === e.target.value,
+    );
+    if (onchange && selectedOption) {
+      onchange(selectedOption);
+    }
+  };
+
   return (
-    <div>
-      {label && <label htmlFor={name}>{label}</label>}
+    <div className="d-flex flex-column">
+      {label && <label htmlFor={id}>{label}</label>}
       <select
-        id={name}
-        defaultValue={defaultValue} // Remplacez value par defaultValue
+        id={id}
+        defaultValue={defaultValue}
         {...register(name, validationSchema)}
         className={className}
+        onChange={handleChange} // Utilisation de handleChange ici
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

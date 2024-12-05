@@ -1,43 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, NavLink } from "react-router-dom";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useMediaQuery } from "react-responsive";
-import Input from "../../components/input/Input";
-import BtnSubmit from "../../components/btnsubmit/BtnSubmit";
-import H1visiteur from "../../components/h1visiteur/H1visiteur";
+import Input from "../input/Input";
+import BtnSubmit from "../btnsubmit/BtnSubmit";
+import H1visiteur from "../h1visiteur/H1visiteur";
 
 interface LoginForm {
   email: string;
   password: string;
 }
 
-const LoginClient = () => {
+const LoginCart = () => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1225px)" });
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<LoginForm>();
+  } = useForm<LoginForm>(); // Ajout du type générique LoginForm
   const signIn = useSignIn();
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
+
   const handleLogin: SubmitHandler<LoginForm> = async (data) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}auth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+    const { email, password } = data;
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}auth`, {
+      method: "POST", // Ajout de la méthode
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData);
-        return;
-      }
-
-      const responseData = await response.json();
+    if (response.ok) {
+      const responseData = await response.json(); // Renommage de `data` en `responseData`
       signIn({
         auth: {
           token: responseData.token,
@@ -49,9 +44,7 @@ const LoginClient = () => {
           role: responseData.role,
         },
       });
-      navigate("/client/tableau-de-bord");
-    } catch (e) {
-      setError("erreur interne");
+      navigate("/tableau-de-bord");
     }
   };
   let containerForm;
@@ -60,7 +53,6 @@ const LoginClient = () => {
   } else if (isTabletOrMobile) {
     containerForm = "d-flex flex-column mx-auto align-items-center mx-auto";
   }
-
   let bloc;
   if (isBigScreen) {
     bloc = "d-flex  flex-wrap w380";
@@ -119,7 +111,7 @@ const LoginClient = () => {
               id="password"
               value=""
               messRequired="Le mot de passe est obligatoire."
-              messMinLength="Le minimum est 12 caractères."
+              messMinLength="Le minimum est 2 caractères."
               messMaxLength="Le maximum est 50 caractères."
               container_input="h-20"
               required
@@ -130,7 +122,7 @@ const LoginClient = () => {
         <div className="d-flex justify-content-center">
           <BtnSubmit
             click={() => {}}
-            container_submit="mt-5 "
+            container_submit="container_mobile"
             classe="btn btn-success shadow"
             id="submit"
             value="Se connecter"
@@ -146,4 +138,4 @@ const LoginClient = () => {
   );
 };
 
-export default LoginClient;
+export default LoginCart;

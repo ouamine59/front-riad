@@ -6,6 +6,7 @@ import {
   Path,
   FieldValues,
 } from "react-hook-form";
+import "./input.css";
 
 type InputProps<TFieldValues extends FieldValues> = {
   id: string;
@@ -60,6 +61,7 @@ const Input = <TFieldValues extends FieldValues>({
         {label}
         {required && " *"}
       </label>
+
       <input
         id={id}
         type={type}
@@ -68,21 +70,21 @@ const Input = <TFieldValues extends FieldValues>({
         {...register(name, validationSchema)}
         onChange={onchange}
       />
-      <div className="h-2.5">
+      <div className="error">
         {errorType === "required" && (
-          <div className="text-red-500">{messRequired}</div>
+          <div className="text-danger h">{messRequired}</div>
         )}
         {errorType === "minLength" && (
-          <div className="text-red-500">{messMinLength}</div>
+          <div className="text-danger">{messMinLength}</div>
         )}
         {errorType === "maxLength" && (
-          <div className="text-red-500">{messMaxLength}</div>
+          <div className="text-danger">{messMaxLength}</div>
         )}
         {errorType === "pattern" && (
-          <div className="text-red-500">{messPattern}</div>
+          <div className="text-danger">{messPattern}</div>
         )}
-        {errorType === "max" && <div className="text-red-500">{messMax}</div>}
-        {errorType === "min" && <div className="text-red-500">{messMin}</div>}
+        {errorType === "max" && <div className="text-danger">{messMax}</div>}
+        {errorType === "min" && <div className="text-danger">{messMin}</div>}
         {errorType === "validate" && (
           <div className="text-red-500">{messValidate}</div>
         )}
