@@ -34,20 +34,23 @@ const LoginCart = () => {
     if (response.ok) {
       const responseData = await response.json();
       const parts = responseData.token.split(".");
-      const payload = parts[1];
+      const encodedPayload = parts[1]; // Le payload encodé
+      const decodedPayload = JSON.parse(atob(encodedPayload));
+      // Passer les données utilisateur à signIn
       signIn({
         auth: {
           token: responseData.token,
           type: "Bearer",
         },
         userState: {
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          email: payload.email,
-          id: payload.id,
-          roles: payload.roles,
-          phone: payload.phone,
-          cities: payload.cities,
+          firstName: decodedPayload.firstName,
+          lastName: decodedPayload.lastName,
+          email: decodedPayload.email,
+          id: decodedPayload.id,
+          roles: decodedPayload.roles,
+          phone: decodedPayload.phone,
+          cities: decodedPayload.cities,
+          adress: decodedPayload.adress,
         },
       });
       navigate("/client/tableau-de-bord");

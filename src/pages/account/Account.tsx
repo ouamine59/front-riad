@@ -2,23 +2,28 @@ import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import Input from "../../components/input/Input";
 import BtnSubmit from "../../components/btnsubmit/BtnSubmit";
 import SelectInput from "../../components/selectinput/SelectInput";
 import H1visiteur from "../../components/h1visiteur/H1visiteur";
 
 interface UpdateForm {
+  id: number;
   email: string;
   password: string;
   phone: string;
   firstName: string;
   lastName: string;
-  idCities: number;
+  citiesId: number;
   adress: string;
   comment: string;
 }
 
 const Account = () => {
+  const authHeader = useAuthHeader();
+  const auth = useAuthUser<UpdateForm>();
   const isBigScreen = useMediaQuery({ query: "(min-width: 1225px)" });
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const navigate = useNavigate();
@@ -58,12 +63,17 @@ const Account = () => {
 
   const handleUpdate: SubmitHandler<UpdateForm> = async (data) => {
     try {
+      if (!auth) {
+        setError("Erreur : impossible de récupérer les données utilisateur");
+        return;
+      }
+      const userId = auth.id;
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}api/user/register`,
+        `${process.env.REACT_APP_SERVER_URL}api/user/update/${userId}`,
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `${authHeader}`,
           },
           body: JSON.stringify(data),
         },
@@ -73,7 +83,7 @@ const Account = () => {
         setError("erreur dans");
         return;
       }
-      navigate("se-connecter");
+      alert("account updated");
     } catch (e) {
       navigate("");
     }
@@ -111,6 +121,31 @@ const Account = () => {
           <div className={bloc}>
             <Input
               type="text"
+              name="comment"
+              label="Comment"
+              errors={errors}
+              register={register}
+              validationSchema={{
+                required: false,
+                minLength: 0,
+                maxLength: 80,
+                pattern: {
+                  value: /^[a-zA-Z-]{0,255}$/,
+                  message: "Le format du prénom est invalide.",
+                },
+              }}
+              id="comment"
+              value=""
+              messRequired="Le prénom est obligatoire."
+              messMinLength="Le minimum est de 2 caractères."
+              messMaxLength="Le maximum est de 40 caractères"
+              messPattern="Erreur dans le prénom"
+              container_input="d-flex flex-column"
+              required
+              classe="border rounded px-3 py-2 border border-primary"
+            />
+            <Input
+              type="text"
               name="firstName"
               label="Prénom"
               errors={errors}
@@ -125,7 +160,7 @@ const Account = () => {
                 },
               }}
               id="firstName"
-              value=""
+              value={auth?.firstName}
               messRequired="Le prénom est obligatoire."
               messMinLength="Le minimum est de 2 caractères."
               messMaxLength="Le maximum est de 40 caractères"
@@ -152,7 +187,7 @@ const Account = () => {
                 },
               }}
               id="lastName"
-              value=""
+              value={auth?.lastName}
               messRequired="Le nom est obligatoire."
               messMinLength="Le minimum est de 2 caractères."
               messMaxLength="Le maximum est de 40 caractères"
@@ -179,7 +214,7 @@ const Account = () => {
                 },
               }}
               id="lastName"
-              value=""
+              value={auth?.adress}
               messRequired="L'adresse' est obligatoire."
               messMinLength="Le minimum est de 2 caractères."
               messMaxLength="Le maximum est de 255 caractères"
@@ -193,8 +228,8 @@ const Account = () => {
             <SelectInput
               options={options}
               label="Ville"
-              id="cities"
-              name="idCities"
+              id="citiesId"
+              name="citiesId"
               onchange={handleSelectChange}
               className="border rounded px-3 py-2 selectInput border border-primary"
               validationSchema={{ required: true }} // Exemple de schéma de validation
@@ -218,7 +253,7 @@ const Account = () => {
                 },
               }}
               id="phone"
-              value=""
+              value={auth?.phone}
               messRequired="Le téléphone est obligatoire."
               messMinLength="Le minimum est de 10 caractères."
               messMaxLength="Le maximum est de 10 caractères"
@@ -245,7 +280,7 @@ const Account = () => {
                 },
               }}
               id="email"
-              value=""
+              value={auth?.email}
               messRequired="L'email est obligatoire."
               messMinLength="Le minimum est 2 caractères."
               messMaxLength="Le maximum est 50 caractères."
