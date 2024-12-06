@@ -38,15 +38,21 @@ const LoginClient = () => {
       }
 
       const responseData = await response.json();
+      const parts = responseData.token.split(".");
+      const payload = parts[1];
       signIn({
         auth: {
           token: responseData.token,
           type: "Bearer",
         },
         userState: {
-          name: responseData.name,
-          uid: responseData.id,
-          role: responseData.role,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          email: payload.email,
+          id: payload.id,
+          roles: payload.roles,
+          phone: payload.phone,
+          cities: payload.cities,
         },
       });
       navigate("/client/tableau-de-bord");

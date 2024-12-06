@@ -1,0 +1,22 @@
+.containerOneOrder {
+  background-color: white;
+  width: 350px;
+  height: 150px;
+}
+
+.titleOneOrder {
+  background-color: var(--main-background);
+  color: white;
+  font-family: Roboto;
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+  vertical-align: auto;
+}
+.detail {
+  background-color: #129d33;
+  text-decoration: none;
+  color: white;
+  font-family: roboto;
+  font-size: 16px;
+}

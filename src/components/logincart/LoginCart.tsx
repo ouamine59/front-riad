@@ -32,19 +32,25 @@ const LoginCart = () => {
     });
 
     if (response.ok) {
-      const responseData = await response.json(); // Renommage de `data` en `responseData`
+      const responseData = await response.json();
+      const parts = responseData.token.split(".");
+      const payload = parts[1];
       signIn({
         auth: {
           token: responseData.token,
           type: "Bearer",
         },
         userState: {
-          name: responseData.name,
-          uid: responseData.id,
-          role: responseData.role,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          email: payload.email,
+          id: payload.id,
+          roles: payload.roles,
+          phone: payload.phone,
+          cities: payload.cities,
         },
       });
-      navigate("/tableau-de-bord");
+      navigate("/client/tableau-de-bord");
     }
   };
   let containerForm;

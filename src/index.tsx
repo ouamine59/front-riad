@@ -23,6 +23,7 @@ import Register from "./pages/register/Register";
 import Payment from "./pages/cart/payment/Payment";
 import Account from "./pages/account/Account";
 import BoardConsumer from "./pages/boardconsumer/BoardConsumer";
+import DetailOrder from "./pages/detailorder/DetailOrder";
 
 const store = createStore({
   authName: "_auth",
@@ -151,6 +152,10 @@ const router = createBrowserRouter([
       {
         path: "tableau-de-bord",
         element: <BoardConsumer />,
+      },
+      {
+        path: "orders/detail/:userId/:id",
+        element: <DetailOrder />,
       },
     ],
   },
