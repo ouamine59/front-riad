@@ -11,7 +11,7 @@ interface Product {
   discount: boolean;
   priceDiscount: string;
   description: string;
-  image: { url?: string } | null;
+  image: string;
 }
 
 const ListingProducts = () => {

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { NavLink } from "react-router-dom";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 // components
 import H1visiteur from "../../../components/h1visiteur/H1visiteur";
 
@@ -11,6 +12,17 @@ import "./summary.css";
 import OneSummary from "../oneSummary/OneSummary";
 
 // Définir l'interface pour les items du panier
+interface User {
+  id: number;
+  email: string;
+  password: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  cities: string;
+  adress: string;
+  comment: string;
+}
 interface CartItem {
   id: string;
   name: string;
@@ -52,15 +64,30 @@ const Summary: React.FC = () => {
   } else if (isTabletOrMobile) {
     classNameTotal = "total shadow d-flex justify-content-between rounded-2";
   }
+  let classNameInfo;
+  if (isBigScreen) {
+    classNameInfo = "d-flex justify-content-end me-5";
+  } else if (isTabletOrMobile) {
+    classNameInfo = "d-flex justify-content-center ";
+  }
   if (!authHeader) {
     return <LoginCart />;
   }
+  const auth = useAuthUser<User>();
   return (
     <div>
-      <H1visiteur title="VOTRE PANIER" />
+      <H1visiteur title="RECAPITULATIF" />
 
       {items.length > 0 ? (
         <>
+          <div className={classNameInfo}>
+            <div className="d-flex flex-column p-5 info ">
+              {auth?.firstName} {auth?.lastName}
+              <br />
+              {auth?.cities}
+              {auth?.adress}
+            </div>
+          </div>
           <div className={className}>
             {items.map((item) => (
               <OneSummary
@@ -77,7 +104,6 @@ const Summary: React.FC = () => {
               <div>Montant Total :</div> <div>{total}</div>
             </h3>
           </div>
-
           <div className="d-flex justify-content-center w-100">
             <NavLink
               to="/client/commande/paiement"

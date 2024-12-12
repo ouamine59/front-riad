@@ -102,6 +102,7 @@ const Register = () => {
   return (
     <>
       <H1visiteur title="CREER COMPTE" />
+      {error && <div>{error}</div>}
       <form
         id="form"
         onSubmit={handleSubmit(handleRegister)}

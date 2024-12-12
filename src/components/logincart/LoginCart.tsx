@@ -23,10 +23,12 @@ const LoginCart = () => {
   const signIn = useSignIn();
   const navigate = useNavigate();
 
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const handleLogin: SubmitHandler<LoginForm> = async (data) => {
     const { email, password } = data;
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}auth`, {
-      method: "POST", // Ajout de la méthode
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
@@ -34,9 +36,8 @@ const LoginCart = () => {
     if (response.ok) {
       const responseData = await response.json();
       const parts = responseData.token.split(".");
-      const encodedPayload = parts[1]; // Le payload encodé
+      const encodedPayload = parts[1];
       const decodedPayload = JSON.parse(atob(encodedPayload));
-      // Passer les données utilisateur à signIn
       signIn({
         auth: {
           token: responseData.token,
@@ -54,22 +55,26 @@ const LoginCart = () => {
         },
       });
       navigate("/client/tableau-de-bord");
+    } else {
+      setErrorMessage("Connexion échouée.");
     }
   };
   let containerForm;
   if (isBigScreen) {
     containerForm = "d-flex   w-75 mx-auto";
   } else if (isTabletOrMobile) {
-    containerForm = "d-flex flex-column mx-auto align-items-center mx-auto";
+    containerForm = "d-flex flex-column align-items-center";
   }
+
   let bloc;
   if (isBigScreen) {
-    bloc = "d-flex  flex-wrap w380";
+    bloc = "d-flex flex-column w-100 ";
   } else if (isTabletOrMobile) {
-    bloc = "d-flex flex-column mx-auto align-items-center";
+    bloc = "d-flex justify-content-end w380  mb-3";
   }
   return (
     <div>
+      {errorMessage && <div role="alert">{errorMessage}</div>}
       <H1visiteur title="Connecter vous" />
       <form id="form" onSubmit={handleSubmit(handleLogin)}>
         <div className={containerForm}>

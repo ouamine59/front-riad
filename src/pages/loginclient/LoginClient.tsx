@@ -14,7 +14,7 @@ interface LoginForm {
 
 const LoginClient = () => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1225px)" });
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isTabletOrMobile = useMediaQuery({ query: "(min-width: 380px)" });
   const {
     register,
     formState: { errors },
@@ -39,6 +39,7 @@ const LoginClient = () => {
 
       const responseData = await response.json();
       const parts = responseData.token.split(".");
+
       const encodedPayload = parts[1]; // Le payload encodé
       const decodedPayload = JSON.parse(atob(encodedPayload));
       // Passer les données utilisateur à signIn
@@ -67,18 +68,19 @@ const LoginClient = () => {
   if (isBigScreen) {
     containerForm = "d-flex   w-75 mx-auto";
   } else if (isTabletOrMobile) {
-    containerForm = "d-flex flex-column mx-auto align-items-center mx-auto";
+    containerForm = "d-flex flex-column align-items-center";
   }
 
   let bloc;
   if (isBigScreen) {
-    bloc = "d-flex  flex-wrap w380";
+    bloc = "d-flex flex-column w-100 ";
   } else if (isTabletOrMobile) {
-    bloc = "d-flex flex-column mx-auto align-items-center";
+    bloc = "d-flex justify-content-end w380  mb-3";
   }
   return (
     <div>
       <H1visiteur title="Connecter vous" />
+      {error && <div>{error}</div>}
       <form id="form" onSubmit={handleSubmit(handleLogin)}>
         <div className={containerForm}>
           <div className={bloc}>
@@ -105,7 +107,7 @@ const LoginClient = () => {
               messPattern="Erreur dans l'email"
               container_input="h-20"
               required
-              classe="border rounded px-3 py-2"
+              classe="border rounded px-3 py-2  border border-primary"
             />
           </div>
           <div className={bloc}>
@@ -132,7 +134,7 @@ const LoginClient = () => {
               messMaxLength="Le maximum est 50 caractères."
               container_input="h-20"
               required
-              classe="border rounded px-3 py-2"
+              classe="border rounded px-3 py-2  border border-primary"
             />
           </div>
         </div>

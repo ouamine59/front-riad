@@ -1,13 +1,13 @@
 import React from "react";
-import { UseFormRegister, FieldValues, FieldErrors } from "react-hook-form";
+import { UseFormRegister, FieldErrors, FieldValues } from "react-hook-form";
+import "./textarea.css";
 
-type TextareaProps = {
+type TextareaProps<T extends FieldValues> = {
   label: string;
-  name: string;
-
-  register: UseFormRegister<FieldValues>;
+  name: keyof T; // Associe le nom à une clé valide de T
+  register: UseFormRegister<T>;
   validationSchema: object;
-  errors: FieldErrors<FieldValues>;
+  errors: FieldErrors<T>;
   messRequired: string;
   messMinLength: string;
   messMaxLength: string;
@@ -19,13 +19,12 @@ type TextareaProps = {
   classname: string;
 };
 
-const Textarea: React.FC<TextareaProps> = ({
+const Textarea = <T extends FieldValues>({
   label,
   name,
   register,
   validationSchema,
   errors,
-
   messRequired,
   messMinLength,
   messMaxLength,
@@ -35,16 +34,17 @@ const Textarea: React.FC<TextareaProps> = ({
   messValidate,
   labelcss,
   classname,
-}) => {
+}: TextareaProps<T>) => {
   return (
     <>
-      <label htmlFor={name} className={labelcss}>
+      <label htmlFor={String(name)} className={labelcss}>
         {label}
       </label>
+      <br />
       <div className="h-24">
         <textarea
-          id={name}
-          {...register(name, validationSchema)}
+          id={String(name)}
+          {...register(name as any, validationSchema)} // Cast à cause des types génériques
           className={classname}
         />
         <div className="h-2.5">

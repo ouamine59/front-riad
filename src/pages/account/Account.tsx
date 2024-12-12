@@ -4,10 +4,14 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+import useSignOut from "react-auth-kit/hooks/useSignOut";
 import Input from "../../components/input/Input";
 import BtnSubmit from "../../components/btnsubmit/BtnSubmit";
 import SelectInput from "../../components/selectinput/SelectInput";
 import H1visiteur from "../../components/h1visiteur/H1visiteur";
+import Textarea from "../../components/textarea/Textarea";
+import "./account.css";
 
 interface UpdateForm {
   id: number;
@@ -24,6 +28,7 @@ interface UpdateForm {
 const Account = () => {
   const authHeader = useAuthHeader();
   const auth = useAuthUser<UpdateForm>();
+  const signIn = useSignIn();
   const isBigScreen = useMediaQuery({ query: "(min-width: 1225px)" });
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const navigate = useNavigate();
@@ -67,7 +72,9 @@ const Account = () => {
         setError("Erreur : impossible de récupérer les données utilisateur");
         return;
       }
+
       const userId = auth.id;
+
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_URL}api/user/update/${userId}`,
         {
@@ -80,10 +87,37 @@ const Account = () => {
       );
 
       if (!response.ok) {
-        setError("erreur dans");
+        setError("erreur dans ");
         return;
       }
-      alert("account updated");
+      const responseData = await response.json(); // Traite la réponse JSON
+
+      const { token } = responseData;
+      const parts = token.split(".");
+      const encodedPayload = parts[1]; // Le payload encodé
+      const decodedPayload = JSON.parse(atob(encodedPayload));
+      // Passer les données utilisateur à signIn
+      const success = signIn({
+        auth: {
+          token,
+          type: "Bearer",
+        },
+        userState: {
+          firstName: decodedPayload.firstName,
+          lastName: decodedPayload.lastName,
+          email: decodedPayload.email,
+          id: decodedPayload.id,
+          roles: decodedPayload.roles,
+          phone: decodedPayload.phone,
+          cities: decodedPayload.cities,
+          adress: decodedPayload.adress,
+        },
+      });
+
+      if (!success) {
+        setError("Erreur lors de la mise à jour de l'authentification.");
+      }
+      alert("Compte modifier.");
     } catch (e) {
       navigate("");
     }
@@ -109,9 +143,30 @@ const Account = () => {
   useEffect(() => {
     fetchCities();
   }, []);
+
+  const signOut = useSignOut();
   return (
     <>
-      <H1visiteur title="CREER COMPTE" />
+      <H1visiteur title="MON COMPTE" />
+      <div className="d-flex justify-content-end  mt-md-5">
+        <button
+          className="logout"
+          type="button"
+          aria-label="Submit form"
+          onClick={() => {
+            signOut();
+            navigate("/");
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              signOut();
+            }
+          }}
+        >
+          Se déconnecter
+        </button>
+      </div>
+      {error && <div role="alert">{error}</div>}
       <form
         id="form"
         onSubmit={handleSubmit(handleUpdate)}
@@ -119,31 +174,6 @@ const Account = () => {
       >
         <div className={containerForm}>
           <div className={bloc}>
-            <Input
-              type="text"
-              name="comment"
-              label="Comment"
-              errors={errors}
-              register={register}
-              validationSchema={{
-                required: false,
-                minLength: 0,
-                maxLength: 80,
-                pattern: {
-                  value: /^[a-zA-Z-]{0,255}$/,
-                  message: "Le format du prénom est invalide.",
-                },
-              }}
-              id="comment"
-              value=""
-              messRequired="Le prénom est obligatoire."
-              messMinLength="Le minimum est de 2 caractères."
-              messMaxLength="Le maximum est de 40 caractères"
-              messPattern="Erreur dans le prénom"
-              container_input="d-flex flex-column"
-              required
-              classe="border rounded px-3 py-2 border border-primary"
-            />
             <Input
               type="text"
               name="firstName"
@@ -317,13 +347,39 @@ const Account = () => {
               classe="border rounded px-3 py-2 border border-primary"
             />
           </div>
+          <div className={bloc}>
+            <Textarea<UpdateForm>
+              label="Commentaire"
+              name="comment"
+              register={register}
+              validationSchema={{
+                required: false,
+                minLength: 0,
+                maxLength: 80,
+                pattern: {
+                  value: /^[a-zA-Z-]{0,255}$/,
+                  message: "Le format du commentaire est invalide.",
+                },
+              }}
+              errors={errors}
+              messRequired="Le commentaire est obligatoire."
+              messMinLength="Le minimum est de 0 caractères."
+              messMaxLength="Le maximum est de 255 caractères."
+              messPattern="Erreur dans le commentaire"
+              messMax=""
+              messMin=""
+              messValidate=""
+              labelcss="label-class"
+              classname="textarea-class  border border-primary "
+            />
+          </div>
         </div>
         <BtnSubmit
           click={() => {}}
           container_submit="m-5"
           classe="btn btn-success shadow"
           id="submit"
-          value="S'inscrire"
+          value="MODIFIER"
         />
       </form>
     </>

@@ -11,7 +11,7 @@ interface Product {
   discount: boolean;
   priceDiscount: string;
   description: string;
-  image: { url?: string } | null;
+  image: string;
 }
 
 const OneProduct: React.FC<Product> = ({
@@ -23,6 +23,10 @@ const OneProduct: React.FC<Product> = ({
   description,
   image,
 }) => {
+  const amountRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const dispatch = useDispatch();
+
   function ajouterTexteAvantDeuxDerniers(chaine: string) {
     if (chaine.length < 2) {
       return `0,${chaine}€`;
@@ -30,16 +34,26 @@ const OneProduct: React.FC<Product> = ({
     return `${chaine.slice(0, -2)}€${chaine.slice(-2)}`;
   }
 
-  const amountRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
-
   const p = ajouterTexteAvantDeuxDerniers(price);
   const pdis = ajouterTexteAvantDeuxDerniers(priceDiscount);
 
-  function handleAddProduct() {
+  function handleAddProduct(productId: string) {
+    const btnAddElement = buttonRefs.current[productId];
+
+    if (btnAddElement) {
+      // Ajouter une classe d'animation
+      btnAddElement.classList.add("animate");
+
+      // Retirer la classe après l'animation
+      setTimeout(() => {
+        btnAddElement.classList.remove("animate");
+      }, 300); // La durée doit correspondre au CSS
+    }
+
     const amount = amountRef.current
-      ? parseInt(amountRef.current.innerHTML, 10) // Fix: Add radix
+      ? parseInt(amountRef.current.innerHTML, 10)
       : 1;
+
     dispatch(
       addItemToCart({
         id,
@@ -54,14 +68,14 @@ const OneProduct: React.FC<Product> = ({
 
   function handleMore() {
     if (amountRef.current) {
-      const currentAmount = parseInt(amountRef.current.innerHTML, 10); // Fix: Add radix
+      const currentAmount = parseInt(amountRef.current.innerHTML, 10);
       amountRef.current.innerHTML = (currentAmount + 1).toString();
     }
   }
 
   function handleLess() {
     if (amountRef.current) {
-      const currentAmount = parseInt(amountRef.current.innerHTML, 10); // Fix: Add radix
+      const currentAmount = parseInt(amountRef.current.innerHTML, 10);
       if (currentAmount > 1) {
         amountRef.current.innerHTML = (currentAmount - 1).toString();
       }
@@ -70,10 +84,10 @@ const OneProduct: React.FC<Product> = ({
 
   return (
     <div className="containerOneProduct d-flex mb-3 shadow" key={id}>
-      {image && image.url ? (
+      {image ? (
         <img
           className="imageOneProduct"
-          src={image.url}
+          src={`${process.env.REACT_APP_SERVER_URL}/media/${image}`}
           alt={title}
           width="200"
         />
@@ -115,10 +129,13 @@ const OneProduct: React.FC<Product> = ({
             </strong>
           </div>
           <div
-            onClick={handleAddProduct}
-            onKeyDown={(e) => e.key === "Enter" && handleAddProduct()}
+            onClick={() => handleAddProduct(id)}
             role="button"
             tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && handleAddProduct(id)}
+            ref={(el) => {
+              buttonRefs.current[id] = el;
+            }}
             className="btnAdd d-flex justify-content-center align-items-center rounded-5"
           >
             +

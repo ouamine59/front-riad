@@ -34,7 +34,12 @@ const One: React.FC<Product> = ({
   };
   return (
     <div className="containerOneProduct d-flex mb-3 shadow">
-      <img className="imageOneProduct" src={image} alt={title} width="200" />
+      <img
+        className="imageOneProduct"
+        src={`${process.env.REACT_APP_SERVER_URL}/media/${image}`}
+        alt={title}
+        width="200"
+      />
       <div className="blockInfoOneProduct">
         <div className="d-flex justify-content-between">
           <h3 className="titleOneProduct w-100">{title}</h3>

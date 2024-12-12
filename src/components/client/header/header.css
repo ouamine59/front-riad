@@ -6,4 +6,8 @@
 .nav {
   color: white;
   text-decoration: none;
+  width: 120px;
+}
+.nav:hover {
+  font-size: 20px;
 }

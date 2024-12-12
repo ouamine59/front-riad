@@ -14,7 +14,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react",
+    "types": ["jest"]
   },
-  "include": ["src", "src/assets"]
+  "include": [
+    "src",
+    "src/assets",
+    "babel.config.ts",
+    "jest.config.ts",
+    "jest.setup.ts"
+  ]
 }

@@ -1,0 +1,17 @@
+footer {
+  background-color: var(--main-background);
+  min-height: 352px;
+  width: 100%;
+}
+footer article h1 {
+  font-size: 17px;
+}
+footer article h1,
+footer article p {
+  color: white;
+  font-family: Roboto;
+}
+img {
+  width: 70px;
+  height: 70px;
+}
