@@ -1,8 +1,13 @@
-.header {
+.header,
+.headerMobile {
   background-color: var(--main-background);
+}
+.header {
   height: 29px;
 }
-
+.headerMobile {
+  height: 100px;
+}
 .nav {
   color: white;
   text-decoration: none;

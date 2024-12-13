@@ -50,7 +50,7 @@ const BoardConsumer = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch");
+        throw new Error("Erreur de chargement.");
       }
 
       const data: ApiResponse = await response.json();
@@ -67,7 +67,7 @@ const BoardConsumer = () => {
   return (
     <>
       <H1visiteur title="BONJOUR" />
-      {error && <p>{error}</p>}
+
       {orders.length > 0 ? (
         <div className="d-flex flex-wrap justify-content-center">
           {orders.map((order) => (
@@ -81,7 +81,7 @@ const BoardConsumer = () => {
           ))}
         </div>
       ) : (
-        !error && <p>Chargement des commandes...</p>
+        error && <p>{error}</p>
       )}
     </>
   );

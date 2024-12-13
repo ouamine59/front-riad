@@ -118,6 +118,7 @@ const Account = () => {
         setError("Erreur lors de la mise à jour de l'authentification.");
       }
       alert("Compte modifier.");
+      //
     } catch (e) {
       navigate("");
     }
@@ -329,10 +330,10 @@ const Account = () => {
               register={register}
               validationSchema={{
                 required: true,
-                minLength: 12,
+                minLength: 8,
                 pattern: {
                   value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};:"|,.<>/?~`])[A-Za-z\d!@#$%^&*()_\-+=$begin:math:display$$end:math:display${};:"\\|,.<>/?~`]{12,}$/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};:"|,.<>/?~`])[A-Za-z\d!@#$%^&*()_\-+=$begin:math:display$$end:math:display${};:"\\|,.<>/?~`]{8,}$/,
                   message: "Le format de l'email est invalide.",
                 },
               }}

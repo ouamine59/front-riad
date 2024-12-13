@@ -14,6 +14,7 @@ import App from "./App";
 import Admin from "./Admin";
 import Consumer from "./Consumer";
 // pages
+import Accueil from "./pages/accueil/Accueil";
 import ListingProducts from "./pages/listingproducts/ListingProducts";
 import LoginClient from "./pages/loginclient/LoginClient";
 import Cart from "./pages/cart/cart/Cart";
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <AppError />,
     children: [
+      {
+        path: "/",
+        element: <Accueil />,
+      },
       {
         path: "produits/liste",
         element: <ListingProducts />,

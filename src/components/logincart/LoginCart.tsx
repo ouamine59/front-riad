@@ -114,18 +114,18 @@ const LoginCart = () => {
               register={register}
               validationSchema={{
                 required: true,
-                minLength: 12,
+                minLength: 8,
                 maxLength: 50,
                 pattern: {
                   value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};:"|,.<>/?~`])[A-Za-z\d!@#$%^&*()_\-+=$begin:math:display$$end:math:display${};:"\\|,.<>/?~`]{12,}$/,
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};:"|,.<>/?~`])[A-Za-z\d!@#$%^&*()_\-+=$begin:math:display$$end:math:display${};:"\\|,.<>/?~`]{8,}$/,
                   message: "Le format du mot de passe est invalide.",
                 },
               }}
               id="password"
               value=""
               messRequired="Le mot de passe est obligatoire."
-              messMinLength="Le minimum est 2 caractères."
+              messMinLength="Le minimum est 8 caractères."
               messMaxLength="Le maximum est 50 caractères."
               container_input="h-20"
               required
