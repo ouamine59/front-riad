@@ -31,6 +31,12 @@ const Account = () => {
   const signIn = useSignIn();
   const isBigScreen = useMediaQuery({ query: "(min-width: 1225px)" });
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+  } = useForm<UpdateForm>();
   const navigate = useNavigate();
   const [options, setOptions] = useState<
     { value: string | number; label: string }[]
@@ -40,6 +46,7 @@ const Account = () => {
     label: string;
   }) => {
     setOptions([option]);
+    setValue("citiesId", option.value as number);
   };
   const fetchCities = async () => {
     try {
@@ -58,11 +65,6 @@ const Account = () => {
       setOptions([]);
     }
   };
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm<UpdateForm>();
 
   const [error, setError] = useState<string | null>(null);
 

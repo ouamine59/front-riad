@@ -80,7 +80,7 @@ const Cart: React.FC = () => {
           </div>
         </>
       ) : (
-        <p>Le panier est vide.</p>
+        <p className="text-danger">Le panier est vide.</p>
       )}
     </div>
   );

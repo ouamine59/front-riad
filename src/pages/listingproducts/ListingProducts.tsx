@@ -36,7 +36,7 @@ const ListingProducts = () => {
       setProducts(data);
       setError(null);
     } catch (err) {
-      setError("Something went wrong. Please try again later.");
+      setError("Il y a une erreur.");
       setProducts([]);
     }
   };
@@ -52,8 +52,8 @@ const ListingProducts = () => {
   return (
     <>
       <H1visiteur title="LES PRODUITS" />
+      {error && <p className="text-danger">{error}</p>}
       <div className={className}>
-        {error && <p className="text-danger">{error}</p>}
         {products.length === 0 && !error ? (
           <p>No products found</p>
         ) : (

@@ -57,7 +57,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   }
 
   // Redirection si non connecté ou non autorisé
-  return <Navigate to="/login" replace />;
+  return <Navigate to="/" replace />;
 };
 
 const PrivateConsumer: React.FC<PrivateRouteProps> = ({ children }) => {
@@ -79,7 +79,7 @@ const PrivateConsumer: React.FC<PrivateRouteProps> = ({ children }) => {
   }
 
   // Redirection si non connecté ou non autorisé
-  return <Navigate to="/login" replace />;
+  return <Navigate to="/se-connecter" replace />;
 };
 const Login: React.FC<PrivateRouteProps> = ({ children }) => {
   const auth = useAuthUser();
@@ -93,6 +93,27 @@ const Login: React.FC<PrivateRouteProps> = ({ children }) => {
     <>{children}</>
   );
 };
+const LoginAdmin: React.FC<PrivateRouteProps> = ({ children }) => {
+  const auth = useAuthUser();
+  const token = useAuthHeader();
+
+  if (auth && token) {
+    try {
+      const tokenValue = token; // Appel de la fonction token
+      if (tokenValue) {
+        const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
+        if (user?.roles?.includes("ROLE_ADMIN")) {
+          return <Navigate to="/admin/tableau-de-bord" />;
+        }
+        return <>{children}</>;
+      }
+    } catch (error) {
+      return <AppError />;
+    }
+  }
+  // Si non connecté
+  return <Navigate to="/admin/se-connecter" replace />;
+};
 // Configuration du router
 const router = createBrowserRouter([
   {
@@ -105,7 +126,7 @@ const router = createBrowserRouter([
         element: <Accueil />,
       },
       {
-        path: "produits/liste",
+        path: "/produits/liste",
         element: <ListingProducts />,
       },
       {
@@ -114,6 +135,14 @@ const router = createBrowserRouter([
           <Login>
             <LoginClient />
           </Login>
+        ),
+      },
+      {
+        path: "/admin/se-connecter",
+        element: (
+          <LoginAdmin>
+            <LoginClient />
+          </LoginAdmin>
         ),
       },
       {
