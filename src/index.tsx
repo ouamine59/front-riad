@@ -17,6 +17,7 @@ import Consumer from "./Consumer";
 import Accueil from "./pages/accueil/Accueil";
 import ListingProducts from "./pages/listingproducts/ListingProducts";
 import LoginClient from "./pages/loginclient/LoginClient";
+import LoginA from "./pages/loginadmin/LoginAdmin";
 import Cart from "./pages/cart/cart/Cart";
 import AppError from "./AppError";
 import Summary from "./pages/cart/summary/Summary";
@@ -25,6 +26,8 @@ import Payment from "./pages/cart/payment/Payment";
 import Account from "./pages/account/Account";
 import BoardConsumer from "./pages/boardconsumer/BoardConsumer";
 import DetailOrder from "./pages/detailorder/DetailOrder";
+import DashbordAdmin from "./pages/dashboardadmin/DashbordAdmin";
+import ListingProductsAdmin from "./pages/listingproductsadmin/ListingProductsAdmin";
 
 const store = createStore({
   authName: "_auth",
@@ -103,16 +106,17 @@ const LoginAdmin: React.FC<PrivateRouteProps> = ({ children }) => {
       if (tokenValue) {
         const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
         if (user?.roles?.includes("ROLE_ADMIN")) {
-          return <Navigate to="/admin/tableau-de-bord" />;
+          // Redirection vers le tableau de bord admin
+          return <Navigate to="/admin/tableau-de-bord" replace />;
         }
-        return <>{children}</>;
       }
     } catch (error) {
       return <AppError />;
     }
   }
-  // Si non connecté
-  return <Navigate to="/admin/se-connecter" replace />;
+
+  // Affichage des enfants si aucune condition de redirection n'est remplie
+  return <>{children}</>;
 };
 // Configuration du router
 const router = createBrowserRouter([
@@ -141,7 +145,7 @@ const router = createBrowserRouter([
         path: "/admin/se-connecter",
         element: (
           <LoginAdmin>
-            <LoginClient />
+            <LoginA />
           </LoginAdmin>
         ),
       },
@@ -166,6 +170,16 @@ const router = createBrowserRouter([
         <Admin />
       </PrivateRoute>
     ),
+    children: [
+      {
+        path: "tableau-de-bord",
+        element: <DashbordAdmin />,
+      },
+      {
+        path: "les-produits",
+        element: <ListingProductsAdmin />,
+      },
+    ],
   },
   {
     path: "/client",

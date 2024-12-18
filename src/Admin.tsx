@@ -1,12 +1,16 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import Header from "./components/admin/header/Header";
+import Sideboard from "./components/sideboard/Sideboard";
 
-// Utilisez une déclaration de fonction classique
 const Admin = () => {
   return (
     <>
-      qscsdc
-      <Outlet />
+      <Header />
+      <main className="d-flex">
+        <Sideboard />
+        <Outlet />
+      </main>
     </>
   );
 };
