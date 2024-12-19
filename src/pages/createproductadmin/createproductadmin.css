@@ -1,0 +1,48 @@
+.btnDiscount {
+  width: 40px;
+  height: 30px;
+  border-radius: 20px;
+}
+.green {
+  background-color: green;
+}
+.red {
+  background-color: red;
+}
+
+/* Conteneur du toggle */
+.toggle-container {
+  width: 60px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+/* Cercle à l'intérieur du toggle */
+.toggle-circle {
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2.5px;
+  left: 2.5px;
+  transition: transform 0.3s ease;
+  color: white;
+}
+
+/* Quand le toggle est actif */
+.toggle-container.active {
+  background-color: green;
+  justify-content: flex-end;
+}
+
+.toggle-container.active .toggle-circle {
+  transform: translateX(30px);
+}

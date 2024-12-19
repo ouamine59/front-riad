@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useMediaQuery } from "react-responsive";
 import Input from "../../components/input/Input";
@@ -146,11 +146,6 @@ const LoginAdmin = () => {
             id="submit"
             value="Se connecter"
           />
-        </div>
-        <div className="d-flex justify-content-center">
-          <NavLink className="d-block" to="/inscription">
-            Inscription
-          </NavLink>
         </div>
       </form>
     </div>

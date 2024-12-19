@@ -28,6 +28,8 @@ import BoardConsumer from "./pages/boardconsumer/BoardConsumer";
 import DetailOrder from "./pages/detailorder/DetailOrder";
 import DashbordAdmin from "./pages/dashboardadmin/DashbordAdmin";
 import ListingProductsAdmin from "./pages/listingproductsadmin/ListingProductsAdmin";
+import DetailProductAdmin from "./pages/detailproductadmin/DetailProductAdmin";
+import CreateProductAdmin from "./pages/createproductadmin/CreateProductAdmin";
 
 const store = createStore({
   authName: "_auth",
@@ -102,11 +104,10 @@ const LoginAdmin: React.FC<PrivateRouteProps> = ({ children }) => {
 
   if (auth && token) {
     try {
-      const tokenValue = token; // Appel de la fonction token
+      const tokenValue = token;
       if (tokenValue) {
-        const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
+        const user = JSON.parse(atob(tokenValue.split(".")[1]));
         if (user?.roles?.includes("ROLE_ADMIN")) {
-          // Redirection vers le tableau de bord admin
           return <Navigate to="/admin/tableau-de-bord" replace />;
         }
       }
@@ -178,6 +179,14 @@ const router = createBrowserRouter([
       {
         path: "les-produits",
         element: <ListingProductsAdmin />,
+      },
+      {
+        path: "products/detail/:id",
+        element: <DetailProductAdmin />,
+      },
+      {
+        path: "products/create",
+        element: <CreateProductAdmin />,
       },
     ],
   },
