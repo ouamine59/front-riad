@@ -46,13 +46,11 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const auth = useAuthUser();
   const token = useAuthHeader();
-
   if (auth && token) {
     try {
-      const tokenValue = token; // Appel de la fonction token
-      if (tokenValue) {
-        const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
-        if (user?.roles.includes("ROLE_ADMIN")) {
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        if (payload?.roles?.includes("ROLE_ADMIN")) {
           return <>{children}</>;
         }
       }
@@ -71,10 +69,9 @@ const PrivateConsumer: React.FC<PrivateRouteProps> = ({ children }) => {
 
   if (auth && token) {
     try {
-      const tokenValue = token; // Appel de la fonction token
-      if (tokenValue) {
-        const user = JSON.parse(atob(tokenValue.split(".")[1])); // Décodage du token
-        if (user?.roles?.includes("ROLE_CLIENT")) {
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        if (payload?.roles?.includes("ROLE_CLIENT")) {
           return <>{children}</>;
         }
       }
@@ -104,14 +101,15 @@ const LoginAdmin: React.FC<PrivateRouteProps> = ({ children }) => {
 
   if (auth && token) {
     try {
-      const tokenValue = token;
+      const tokenValue = token; // Appel de la fonction token
       if (tokenValue) {
-        const user = JSON.parse(atob(tokenValue.split(".")[1]));
-        if (user?.roles?.includes("ROLE_ADMIN")) {
-          return <Navigate to="/admin/tableau-de-bord" replace />;
+        const payload = JSON.parse(atob(tokenValue.split(".")[1]));
+        if (payload?.roles?.includes("ROLE_ADMIN")) {
+          return <>{children}</>;
         }
       }
     } catch (error) {
+      console.error("Error decoding token:", error);
       return <AppError />;
     }
   }
@@ -226,11 +224,9 @@ if (!rootElement) {
 const root = createRoot(rootElement);
 
 root.render(
-  <React.StrictMode>
-    <AuthProvider store={store}>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </React.StrictMode>,
+  <AuthProvider store={store}>
+    <RouterProvider router={router} />
+  </AuthProvider>,
 );
 
 // Mesurer les performances (optionnel)
