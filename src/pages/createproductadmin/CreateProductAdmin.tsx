@@ -147,20 +147,6 @@ const CreateProductAdmin = () => {
           validationSchema={{ required: true }} // Exemple de schéma de validation
           register={register}
         />
-        <h2>promotion</h2>
-        <div
-          className={`toggle-container ${discount === 1 ? "active" : ""}`}
-          onClick={handleToggleDiscount}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              handleToggleDiscount();
-            }
-          }}
-          role="button"
-          tabIndex={0}
-        >
-          <div className="toggle-circle">a</div>
-        </div>
 
         <input
           id="discount"
@@ -225,6 +211,20 @@ const CreateProductAdmin = () => {
           />
         </div>
         <div className={bloc}>
+          <h2>promotion</h2>
+          <div
+            className={`toggle-container ${discount === 1 ? "active" : ""}`}
+            onClick={handleToggleDiscount}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                handleToggleDiscount();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="toggle-circle">a</div>
+          </div>
           <Input
             type="text"
             name="priceDiscount"

@@ -60,7 +60,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   }
 
   // Redirection si non connecté ou non autorisé
-  return <Navigate to="/" replace />;
+  return <Navigate to="/admin/se-connecter" replace />;
 };
 
 const PrivateConsumer: React.FC<PrivateRouteProps> = ({ children }) => {
@@ -109,7 +109,6 @@ const LoginAdmin: React.FC<PrivateRouteProps> = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error("Error decoding token:", error);
       return <AppError />;
     }
   }
