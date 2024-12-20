@@ -92,11 +92,16 @@ const OneProduct: React.FC<Product> = ({
       }
     }
   }
-
+  function truncate(str: string, maxlength: number): string {
+    return str.length > maxlength ? `${str.slice(0, maxlength - 1)}…` : str;
+  }
+  const d = truncate(description, 15);
   return (
     <div className="containerOneProduct d-flex mb-3 shadow" key={id}>
       <div className="d-flex flex-column ">
-        {discount && <div className="bg-danger text-center ">PROMO</div>}
+        {discount && (
+          <div className="bg-danger text-center text-light">PROMO</div>
+        )}
         {image ? (
           <img
             className="imageOneProduct"
@@ -135,11 +140,11 @@ const OneProduct: React.FC<Product> = ({
             </div>
           </div>
         </div>
-        <p className="descriptionOneProduct">{description}</p>
+        <p className="descriptionOneProduct">{d}</p>
         <div className="containerPriceAdd d-flex justify-content-end align-items-center w-100">
           <div className="price">
             <strong>
-              {p} {discount && <p>{pdis}</p>}
+              {p} {discount && <p className="text-danger">{pdis}</p>}
             </strong>
           </div>
           <div

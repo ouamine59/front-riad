@@ -49,22 +49,22 @@ const Textarea = <T extends FieldValues>({
         />
         <div className="h-2.5">
           {errors[name]?.type === "required" && (
-            <div className="text-red-500">{messRequired}</div>
+            <div className="text-danger">{messRequired}</div>
           )}
           {errors[name]?.type === "minLength" && (
-            <div className="text-red-500">{messMinLength}</div>
+            <div className="text-danger">{messMinLength}</div>
           )}
           {errors[name]?.type === "maxLength" && (
             <div className="text-red-500">{messMaxLength}</div>
           )}
           {errors[name]?.type === "pattern" && (
-            <div className="text-red-500">{messPattern}</div>
+            <div className="text-danger">{messPattern}</div>
           )}
           {errors[name]?.type === "max" && (
-            <div className="text-red-500">{messMax}</div>
+            <div className="text-danger">{messMax}</div>
           )}
           {errors[name]?.type === "min" && (
-            <div className="text-red-500">{messMin}</div>
+            <div className="text-danger">{messMin}</div>
           )}
           {errors[name]?.type === "validate" && (
             <div className="text-red-500">{messValidate}</div>

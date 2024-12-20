@@ -168,7 +168,7 @@ const CreateProductAdmin = () => {
               minLength: 2,
               maxLength: 40,
               pattern: {
-                value: /^[a-zA-Z-]{2,80}$/,
+                value: /^[a-zA-Z - 0-9]{2,80}$/,
                 message: "Le format du nom est invalide.",
               },
             }}
@@ -261,7 +261,7 @@ const CreateProductAdmin = () => {
               minLength: 0,
               maxLength: 200,
               pattern: {
-                value: /^[a-zA-Z- ]{0,200}$/,
+                value: /^[a-zA-Z-0-9 ]{0,200}$/,
                 message: "Le format du commentaire est invalide.",
               },
             }}
