@@ -39,10 +39,10 @@ const LoginClient = () => {
 
       const responseData = await response.json();
       const parts = responseData.token.split(".");
-
       const encodedPayload = parts[1]; // Le payload encodé
       const decodedPayload = JSON.parse(atob(encodedPayload));
       // Passer les données utilisateur à signIn
+      console.log(decodedPayload);
       signIn({
         auth: {
           token: responseData.token,
@@ -55,7 +55,7 @@ const LoginClient = () => {
           id: decodedPayload.id,
           roles: decodedPayload.roles,
           phone: decodedPayload.phone,
-          cities: decodedPayload.cities,
+          citiesId: decodedPayload.citiesId,
           adress: decodedPayload.adress,
         },
       });
