@@ -43,9 +43,14 @@ const Header = () => {
           </NavLink>
         )}
         {isconnected && (
-          <NavLink className="nav " to="/client/mon-compte">
-            Mon compte
-          </NavLink>
+          <>
+            <NavLink className="nav " to="/client/tableau-de-bord">
+              Tableau de bord
+            </NavLink>
+            <NavLink className="nav " to="/client/mon-compte">
+              Mon compte
+            </NavLink>
+          </>
         )}
       </nav>
     </header>
