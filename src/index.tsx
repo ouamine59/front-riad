@@ -9,6 +9,7 @@ import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import createStore from "react-auth-kit/createStore";
 import AuthProvider from "react-auth-kit";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import Admin from "./Admin";
@@ -38,7 +39,6 @@ const store = createStore({
   cookieSecure: window.location.protocol === "https:",
 });
 
-// Configuration de PrivateRoute
 interface PrivateRouteProps {
   children: React.ReactNode;
 }
@@ -58,8 +58,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
       return <AppError />;
     }
   }
-
-  // Redirection si non connecté ou non autorisé
   return <Navigate to="/admin/se-connecter" replace />;
 };
 
@@ -69,20 +67,26 @@ const PrivateConsumer: React.FC<PrivateRouteProps> = ({ children }) => {
 
   if (auth && token) {
     try {
-      if (token) {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        if (payload?.roles?.includes("ROLE_CLIENT")) {
-          return <>{children}</>;
-        }
+      const parts = token.split(".");
+      if (parts.length !== 3) {
+        throw new Error("Invalid token format");
       }
+
+      const payload = JSON.parse(atob(parts[1]));
+      console.log("Payload décodé :", payload);
+
+      if (payload?.roles?.includes("ROLE_CLIENT")) {
+        return <>{children}</>;
+      }
+      return <Navigate to="/client/tableau-de-bord" replace />;
     } catch (error) {
+      console.error("Erreur lors du traitement du token :", error);
       return <AppError />;
     }
   }
-
-  // Redirection si non connecté ou non autorisé
-  return <Navigate to="/se-connecter" replace />;
+  return <Navigate to="/se-connecter" />;
 };
+
 const Login: React.FC<PrivateRouteProps> = ({ children }) => {
   const auth = useAuthUser();
   let isConnected = true; // Le type est inféré automatiquement
@@ -112,11 +116,8 @@ const LoginAdmin: React.FC<PrivateRouteProps> = ({ children }) => {
       return <AppError />;
     }
   }
-
-  // Affichage des enfants si aucune condition de redirection n'est remplie
   return <>{children}</>;
 };
-// Configuration du router
 const router = createBrowserRouter([
   {
     path: "/",

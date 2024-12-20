@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { gsap } from "gsap";
 import { useMediaQuery } from "react-responsive";
 // components
 import OneProduct from "../../components/oneproduct/OneProduct";
@@ -42,6 +43,12 @@ const ListingProducts = () => {
   };
   useEffect(() => {
     listing();
+    gsap.to("header", { x: 200 });
+    gsap.to("main", { x: -200 });
+    setTimeout(() => {
+      gsap.to("header", { x: 0 });
+      gsap.to("main", { x: 0 });
+    }, 1000);
   }, []);
   let className;
   if (isBigScreen) {

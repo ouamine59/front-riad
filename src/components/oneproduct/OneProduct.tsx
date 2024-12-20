@@ -33,8 +33,13 @@ const OneProduct: React.FC<Product> = ({
     }
     return `${chaine.slice(0, -2)}€${chaine.slice(-2)}`;
   }
+  let p;
+  if (discount) {
+    p = ajouterTexteAvantDeuxDerniers(price);
+  } else {
+    p = ajouterTexteAvantDeuxDerniers(price);
+  }
 
-  const p = ajouterTexteAvantDeuxDerniers(price);
   const pdis = ajouterTexteAvantDeuxDerniers(priceDiscount);
 
   function handleAddProduct(productId: string) {
@@ -53,15 +58,21 @@ const OneProduct: React.FC<Product> = ({
     const amount = amountRef.current
       ? parseInt(amountRef.current.innerHTML, 10)
       : 1;
-
+    let px;
+    if (discount) {
+      px = priceDiscount;
+    } else {
+      px = price;
+    }
     dispatch(
       addItemToCart({
         id,
         name: title,
-        price: parseFloat(price),
+        price: parseFloat(px),
         quantity: amount,
         description,
         image,
+        discount,
       }),
     );
   }
@@ -84,16 +95,19 @@ const OneProduct: React.FC<Product> = ({
 
   return (
     <div className="containerOneProduct d-flex mb-3 shadow" key={id}>
-      {image ? (
-        <img
-          className="imageOneProduct"
-          src={`${process.env.REACT_APP_SERVER_URL}/media/${image}`}
-          alt={title}
-          width="200"
-        />
-      ) : (
-        <div className="imageOneProduct">No image available</div>
-      )}
+      <div className="d-flex flex-column ">
+        {discount && <div className="bg-danger text-center ">PROMO</div>}
+        {image ? (
+          <img
+            className="imageOneProduct"
+            src={`${process.env.REACT_APP_SERVER_URL}/media/${image}`}
+            alt={title}
+            width="200"
+          />
+        ) : (
+          <div className="imageOneProduct">No image available</div>
+        )}
+      </div>
       <div className="blockInfoOneProduct">
         <div className="d-flex justify-content-between">
           <h3 className="titleOneProduct w-100">{title}</h3>
@@ -125,7 +139,7 @@ const OneProduct: React.FC<Product> = ({
         <div className="containerPriceAdd d-flex justify-content-end align-items-center w-100">
           <div className="price">
             <strong>
-              {p} {discount && `(Discounted: ${pdis})`}
+              {p} {discount && <p>{pdis}</p>}
             </strong>
           </div>
           <div
